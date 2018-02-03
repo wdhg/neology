@@ -47,12 +47,9 @@ def main():
     # Create matricies
     matrices = create_matrices(sorted_words)
 
-    print(matrices[4][letters.index('q')])
-
     # Create a new word
     length = int(sys.argv[1])
-    #letter = random.choice(letters)
-    letter = 'q'
+    letter = random.choice(letters)
     for _ in range(length):
         print(letter, end='')
         letter = random.choices(letters, matrices[length][letters.index(letter)])[0]
