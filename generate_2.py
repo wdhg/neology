@@ -67,7 +67,7 @@ def main():
 
     # Calculate the probabilty of each letter being in certain positions
     # of certain length words
-    char_pos_probabilities = calc_char_pos_probabilities(sorted_words)
+    #char_pos_probabilities = calc_char_pos_probabilities(sorted_words)
 
     for _ in range(int(sys.argv[2])):
         # Create a new word
@@ -79,12 +79,13 @@ def main():
             letter = random.choice(letters)        
         print(letter, end='')
         for pos in range(1, length):
-            weights = [
-                x * y for x, y in zip(
-                    matrices[length][letters.index(letter)],
-                    char_pos_probabilities[length][pos]
-                )
-            ]
+            #weights = [
+            #    x * y for x, y in zip(
+            #        matrices[length][letters.index(letter)],
+            #        char_pos_probabilities[length][pos]
+            #    )
+            #]
+            weights = matrices[length][letters.index(letter)]
             letter = random.choices(letters, weights=weights)[0]
             print(letter, end='')
         print()
