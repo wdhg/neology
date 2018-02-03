@@ -50,6 +50,10 @@ def main():
     # Create a new word
     length = int(sys.argv[1])
     letter = random.choice(letters)
+    # Check to make sure that the starting letter actually has probabilities
+    # for next letters
+    while not any(matrices[length][letters.index(letter)]):
+        letter = random.choice(letters)        
     for _ in range(length):
         print(letter, end='')
         letter = random.choices(letters, matrices[length][letters.index(letter)])[0]
