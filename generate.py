@@ -1,6 +1,6 @@
 import random
 
-WORD_LENGTH = 7
+WORD_LENGTH = 15
 
 # Sort words into groups of word length
 def sort_words(words):
@@ -51,7 +51,7 @@ def main():
                 create_probability_table(sorted_words[length], char_pos)
             )
     # Generate a new word
-    for p_table in probabilities[7]:
+    for p_table in probabilities[WORD_LENGTH]:
         # Predict character
         print(check_probability_table(p_table, random.random()), end='')
     print()
