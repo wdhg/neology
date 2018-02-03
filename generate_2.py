@@ -16,18 +16,20 @@ def sort_words(words):
 def create_matrices(sorted_words):
     matrices = {}
     for length in sorted_words.keys():
-        tally_matrix = [[0] * 26] * 26
+        tally_matrix = [[0] * 26 for _ in range(26)]
         for word in sorted_words[length]:
             # Replace the letters with their position in the alphabet
             word = [letters.index(char) for char in word]
             # Iterate through each letter and the next letter
-            for a, b in zip(word[1:], word[:-1]):
+            for a, b in zip(word[:-1], word[1:]):
                 tally_matrix[a][b] += 1
         # Normalize matrix
         matrix = []
         for row in range(len(tally_matrix)):
             matrix.append([])
             max_value = sum(tally_matrix[row])
+            if max_value == 0:
+                continue
             for column in range(len(tally_matrix)):
                 matrix[row].append(tally_matrix[row][column] / max_value)
         matrices[length] = matrix
@@ -45,12 +47,15 @@ def main():
     # Create matricies
     matrices = create_matrices(sorted_words)
 
+    print(matrices[4][letters.index('q')])
+
     # Create a new word
     length = int(sys.argv[1])
-    letter = random.choice(letters)
+    #letter = random.choice(letters)
+    letter = 'q'
     for _ in range(length):
         print(letter, end='')
-        letter = random.choices(letters, matrices[length][letter.index(letter)])[0]
+        letter = random.choices(letters, matrices[length][letters.index(letter)])[0]
     print()
 
 if __name__ == '__main__':
