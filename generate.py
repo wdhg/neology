@@ -12,9 +12,9 @@ def sort_words(words):
         sorted_words[length].append(word)
     return sorted_words
 
-# Create a frequency table for the probabliliy for specific letter
+# Create a probability table for the probabliliy for specific letter
 # to be in a certain position of a word of a certain length
-def create_frequency_table(word_list, char_pos):
+def create_probability_table(word_list, char_pos):
     char_counts = {}
     for word in word_list:
         char = word[char_pos]
@@ -22,16 +22,16 @@ def create_frequency_table(word_list, char_pos):
             char_counts[char] = 0
         char_counts[char] += 1
     total = sum(char_counts.values())
-    frequency_table = {}
+    probability_table = {}
     running_total = 0
     for char in char_counts.keys():
         running_total += char_counts[char] / total
-        frequency_table[char] = running_total
-    return frequency_table
+        probability_table[char] = running_total
+    return probability_table
 
-def check_frequency_table(f_table, value):
-    for char in f_table.keys():
-        if value < f_table[char]:
+def check_probability_table(p_table, value):
+    for char in p_table.keys():
+        if value < p_table[char]:
             return char
     # Just return the last char. Only here due to floating point inaccuracies
     return char 
@@ -42,18 +42,18 @@ def main():
         words = file.read().split('\n')
         words.remove('')
     sorted_words = sort_words(words)
-    # Create frequency tables
-    frequencies = {}
+    # Create probability tables
+    probabilities = {}
     for length in sorted_words.keys(): 
-        frequencies[length] = []
+        probabilities[length] = []
         for char_pos in range(length):
-            frequencies[length].append(
-                create_frequency_table(sorted_words[length], char_pos)
+            probabilities[length].append(
+                create_probability_table(sorted_words[length], char_pos)
             )
     # Generate a new word
-    for f_table in frequencies[7]:
+    for p_table in probabilities[7]:
         # Predict character
-        print(check_frequency_table(f_table, random.random()), end='')
+        print(check_probability_table(p_table, random.random()), end='')
     print()
 
 if __name__ == '__main__':
