@@ -1,7 +1,7 @@
 import random
 import sys
 
-letters = list('abcdefghijklmnopqrstuvwxyz')
+letters = list("abcdefghijklmnopqrstuvwxyz'")
 
 # Create a dict of words of certain lengths
 def sort_words(words):
@@ -16,7 +16,7 @@ def sort_words(words):
 def create_matrices(sorted_words):
     matrices = {}
     for length in sorted_words.keys():
-        tally_matrix = [[0] * 26 for _ in range(26)]
+        tally_matrix = [[0] * 27 for _ in range(27)]
         for word in sorted_words[length]:
             # Replace the letters with their position in the alphabet
             word = [letters.index(char) for char in word]
@@ -41,7 +41,7 @@ def calc_char_pos_probabilities(sorted_words):
     for length in sorted_words.keys():
         pos_probabilities = {}
         for pos in range(length):
-            values = [0] * 26
+            values = [0] * 27
             for word in sorted_words[length]:
                 for letter in word:
                     values[letters.index(letter)] += 1
@@ -69,24 +69,25 @@ def main():
     # of certain length words
     char_pos_probabilities = calc_char_pos_probabilities(sorted_words)
 
-    # Create a new word
-    length = int(sys.argv[1])
-    letter = random.choice(letters)
-    # Check to make sure that the starting letter actually has probabilities
-    # for next letters
-    while not any(matrices[length][letters.index(letter)]):
-        letter = random.choice(letters)        
-    print(letter, end='')
-    for pos in range(1, length):
-        weights = [
-            x * y for x, y in zip(
-                matrices[length][letters.index(letter)],
-                char_pos_probabilities[length][pos]
-            )
-        ]
-        letter = random.choices(letters, weights=weights)[0]
+    for _ in range(int(sys.argv[2])):
+        # Create a new word
+        length = int(sys.argv[1])
+        letter = random.choice(letters)
+        # Check to make sure that the starting letter actually has probabilities
+        # for next letters
+        while not any(matrices[length][letters.index(letter)]):
+            letter = random.choice(letters)        
         print(letter, end='')
-    print()
+        for pos in range(1, length):
+            weights = [
+                x * y for x, y in zip(
+                    matrices[length][letters.index(letter)],
+                    char_pos_probabilities[length][pos]
+                )
+            ]
+            letter = random.choices(letters, weights=weights)[0]
+            print(letter, end='')
+        print()
 
 if __name__ == '__main__':
     main()
