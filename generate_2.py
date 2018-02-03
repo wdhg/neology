@@ -28,12 +28,30 @@ def create_matrices(sorted_words):
         for row in range(len(tally_matrix)):
             matrix.append([])
             max_value = sum(tally_matrix[row])
+            # Prevent division by zero
             if max_value == 0:
                 continue
             for column in range(len(tally_matrix)):
                 matrix[row].append(tally_matrix[row][column] / max_value)
         matrices[length] = matrix
     return matrices
+
+def calc_char_pos_probabilities(sorted_words):
+    probabilities = {}
+    for length in sorted_words.keys():
+        pos_probabilities = {}
+        for pos in range(length):
+            values = [0] * 26
+            for word in sorted_words[length]:
+                for letter in word:
+                    values[letters.index(letter)] += 1
+            max_value = sum(values)
+            # Normalize
+            for i in range(len(values)):
+                values[i] /= max_value
+            pos_probabilities[pos] = values
+        probabilities[length] = pos_probabilities
+    return probabilities
 
 def main():
     # Get words
@@ -47,6 +65,10 @@ def main():
     # Create matricies
     matrices = create_matrices(sorted_words)
 
+    # Calculate the probabilty of each letter being in certain positions
+    # of certain length words
+    char_pos_probabilities = calc_char_pos_probabilities(sorted_words)
+
     # Create a new word
     length = int(sys.argv[1])
     letter = random.choice(letters)
@@ -54,9 +76,16 @@ def main():
     # for next letters
     while not any(matrices[length][letters.index(letter)]):
         letter = random.choice(letters)        
-    for _ in range(length):
+    print(letter, end='')
+    for pos in range(1, length):
+        weights = [
+            x * y for x, y in zip(
+                matrices[length][letters.index(letter)],
+                char_pos_probabilities[length][pos]
+            )
+        ]
+        letter = random.choices(letters, weights=weights)[0]
         print(letter, end='')
-        letter = random.choices(letters, matrices[length][letters.index(letter)])[0]
     print()
 
 if __name__ == '__main__':
